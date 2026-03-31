@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REALNESS — Mental Health Camp</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #080808;
+  --black2: #111111;
+  --black3: #1a1a1a;
+  --lime: #BBFF00;
+  --lime-dim: rgba(187,255,0,0.12);
+  --lime-glow: rgba(187,255,0,0.35);
+  --white: #F8F8F8;
+  --grey: #888888;
+  --grey2: #444444;
+  --red: #FF3B30;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  width: 10px; height: 10px;
+  background: var(--lime);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease, width 0.2s, height 0.2s;
+  transform: translate(-50%, -50%);
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1.5px solid rgba(187,255,0,0.5);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.08s ease, width 0.2s, height 0.2s, border-color 0.2s;
+}
+a:hover ~ .cursor, button:hover ~ .cursor { transform: translate(-50%,-50%) scale(2); }
+
+/* GRAIN OVERLAY */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.6;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem 3rem;
+  border-bottom: 1px solid var(--grey2);
+  background: rgba(8,8,8,0.92);
+  backdrop-filter: blur(12px);
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.15em;
+  color: var(--lime);
+}
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--grey);
+  text-decoration: none;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  background: var(--lime);
+  color: var(--black);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.7rem 1.6rem;
+  border: none;
+  cursor: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.nav-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--lime-glow);
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 3rem 5rem;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--grey2);
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 30%, rgba(187,255,0,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 10% 80%, rgba(187,255,0,0.04) 0%, transparent 50%);
+}
+.hero-line {
+  position: absolute;
+  top: 0; right: 12rem;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, var(--grey2) 30%, var(--grey2) 70%, transparent);
+  opacity: 0.4;
+}
+.hero-tag {
+  font-family: 'Syne Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--lime);
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  animation: fadeUp 0.8s ease both;
+}
+.hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(5rem, 16vw, 13rem);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+.hero h1 em {
+  color: var(--lime);
+  font-style: normal;
+  display: block;
+}
+.hero-sub {
+  display: flex;
+  gap: 4rem;
+  align-items: flex-end;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+.hero-desc {
+  max-width: 420px;
+  font-size: 1rem;
+  color: var(--grey);
+  line-height: 1.7;
+}
+.hero-desc strong { color: var(--white); }
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+.btn-primary {
+  background: var(--lime);
+  color: var(--black);
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 1.1rem 2.4rem;
+  border: none;
+  cursor: none;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px var(--lime-glow);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--white);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 1.1rem 2.4rem;
+  border: 1px solid var(--grey2);
+  cursor: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-outline:hover { border-color: var(--white); color: var(--lime); }
+.hero-scroll {
+  position: absolute;
+  right: 3rem; bottom: 5rem;
+  writing-mode: vertical-rl;
+  font-family: 'Syne Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--grey2);
+  text-transform: uppercase;
+  animation: fadeUp 1s 0.4s ease both;
+}
+.hero-stats {
+  position: absolute;
+  top: 50%;
+  right: 3rem;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  text-align: right;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.8rem;
+  color: var(--white);
+  line-height: 1;
+}
+.stat-label {
+  font-family: 'Syne Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--grey);
+  text-transform: uppercase;
+}
+
+/* TRUST BAR */
+.trust-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--grey2);
+  overflow: hidden;
+}
+.trust-item {
+  flex: 1;
+  padding: 1.4rem 2rem;
+  border-right: 1px solid var(--grey2);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--grey);
+  letter-spacing: 0.05em;
+}
+.trust-item:last-child { border-right: none; }
+.trust-dot {
+  width: 6px; height: 6px;
+  background: var(--lime);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* SECTION HEADER */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 5rem 3rem 3rem;
+  border-bottom: 1px solid var(--grey2);
+}
+.section-label {
+  font-family: 'Syne Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  color: var(--lime);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 7vw, 6rem);
+  letter-spacing: 0.02em;
+  line-height: 0.9;
+}
+.section-count {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 5rem;
+  color: var(--grey2);
+  line-height: 1;
+}
+
+/* THERAPISTS */
+.therapists-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--grey2);
+}
+.therapist-card {
+  padding: 2.5rem 2.5rem 3rem;
+  border-right: 1px solid var(--grey2);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+.therapist-card:last-child { border-right: none; }
+.therapist-card:hover { background: var(--black2); }
+.therapist-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: var(--lime);
+  transition: width 0.4s ease;
+}
+.therapist-card:hover::after { width: 100%; }
+.therapist-avatar {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: var(--black3);
+  border: 2px solid var(--grey2);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  color: var(--lime);
+  transition: border-color 0.3s;
+}
+.therapist-card:hover .therapist-avatar { border-color: var(--lime); }
+.therapist-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+}
+.therapist-role {
+  font-family: 'Syne Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--lime);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.therapist-bio {
+  font-size: 0.87rem;
+  color: var(--grey);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+.therapist-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.tag {
+  font-family: 'Syne Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--grey2);
+  color: var(--grey);
+}
+.therapist-card:hover .tag { border-color: rgba(187,255,0,0.2); color: var(--lime); }
+
+/* AI QUIZ SECTION */
+.quiz-section {
+  padding: 0;
+  border-bottom: 1px solid var(--grey2);
+}
+.quiz-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.quiz-left {
+  padding: 4rem 3rem;
+  border-right: 1px solid var(--grey2);
+  background: var(--black2);
+}
+.quiz-right {
+  padding: 4rem 3rem;
+  background: var(--black);
+}
+.quiz-intro {
+  font-size: 0.95rem;
+  color: var(--grey);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  max-width: 380px;
+}
+.quiz-feature {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  align-items: flex-start;
+}
+.quiz-feature-icon {
+  width: 32px; height: 32px;
+  background: var(--lime-dim);
+  border: 1px solid rgba(187,255,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.quiz-feature-text h4 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.quiz-feature-text p { font-size: 0.8rem; color: var(--grey); }
+
+/* CHAT UI */
+#chat-messages {
+  height: 320px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-right: 0.5rem;
+}
+#chat-messages::-webkit-scrollbar { width: 3px; }
+#chat-messages::-webkit-scrollbar-track { background: transparent; }
+#chat-messages::-webkit-scrollbar-thumb { background: var(--grey2); }
+.msg {
+  max-width: 85%;
+  padding: 0.8rem 1.1rem;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  animation: msgIn 0.3s ease both;
+}
+.msg.ai {
+  align-self: flex-start;
+  background: var(--black3);
+  border: 1px solid var(--grey2);
+  color: var(--white);
+  border-radius: 0 8px 8px 8px;
+}
+.msg.user {
+  align-self: flex-end;
+  background: var(--lime-dim);
+  border: 1px solid rgba(187,255,0,0.25);
+  color: var(--lime);
+  border-radius: 8px 0 8px 8px;
+}
+.msg.loading {
+  align-self: flex-start;
+  background: var(--black3);
+  border: 1px solid var(--grey2);
+  color: var(--grey);
+  border-radius: 0 8px 8px 8px;
+}
+.typing-dots span {
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--grey);
+  border-radius: 50%;
+  margin: 0 2px;
+  animation: dot 1.2s infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dot { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
+
+.chat-form {
+  display: flex;
+  gap: 0.6rem;
+}
+#chat-input {
+  flex: 1;
+  background: var(--black3);
+  border: 1px solid var(--grey2);
+  color: var(--white);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  padding: 0.85rem 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  cursor: text;
+}
+#chat-input:focus { border-color: var(--lime); }
+#chat-input::placeholder { color: var(--grey2); }
+#chat-send {
+  background: var(--lime);
+  color: var(--black);
+  border: none;
+  padding: 0.85rem 1.5rem;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: none;
+  transition: opacity 0.2s, transform 0.15s;
+}
+#chat-send:hover { opacity: 0.9; transform: translateY(-1px); }
+#chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
+.quiz-disclaimer {
+  font-family: 'Syne Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--grey2);
+  letter-spacing: 0.05em;
+  margin-top: 0.75rem;
+  line-height: 1.6;
+}
+
+/* CONTACT SECTION */
+.contact-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--grey2);
+}
+.contact-left {
+  padding: 5rem 3rem;
+  border-right: 1px solid var(--grey2);
+}
+.contact-right {
+  padding: 5rem 3rem;
+  background: var(--black2);
+}
+.contact-big {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+.contact-big em { color: var(--lime); font-style: normal; display: block; }
+.contact-desc {
+  font-size: 0.92rem;
+  color: var(--grey);
+  line-height: 1.7;
+  max-width: 360px;
+  margin-bottom: 3rem;
+}
+.contact-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+.contact-icon {
+  width: 36px; height: 36px;
+  border: 1px solid var(--grey2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  color: var(--lime);
+}
+.contact-info h4 { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.2rem; }
+.contact-info p { font-size: 0.82rem; color: var(--grey); }
+
+/* FORM */
+.form-group { margin-bottom: 1.25rem; }
+.form-label {
+  display: block;
+  font-family: 'Syne Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--grey);
+  margin-bottom: 0.5rem;
+}
+.form-control {
+  width: 100%;
+  background: var(--black3);
+  border: 1px solid var(--grey2);
+  color: var(--white);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.88rem;
+  padding: 0.9rem 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  cursor: text;
+}
+.form-control:focus { border-color: var(--lime); }
+.form-control::placeholder { color: var(--grey2); }
+textarea.form-control { resize: vertical; min-height: 100px; }
+select.form-control { cursor: pointer; }
+select.form-control option { background: var(--black3); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-submit {
+  width: 100%;
+  background: var(--lime);
+  color: var(--black);
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 0.88rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 1.1rem;
+  border: none;
+  cursor: none;
+  transition: transform 0.15s, box-shadow 0.2s;
+  margin-top: 0.5rem;
+}
+.form-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--lime-glow);
+}
+.form-success {
+  display: none;
+  text-align: center;
+  padding: 3rem 0;
+}
+.form-success h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.5rem;
+  color: var(--lime);
+  margin-bottom: 0.5rem;
+}
+.form-success p { color: var(--grey); font-size: 0.9rem; }
+
+/* FOOTER */
+footer {
+  padding: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 0.15em;
+  color: var(--lime);
+}
+.footer-copy {
+  font-family: 'Syne Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--grey2);
+  letter-spacing: 0.1em;
+}
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+.footer-links a {
+  font-size: 0.78rem;
+  color: var(--grey2);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--lime); }
+
+/* CRISIS BANNER */
+.crisis-banner {
+  background: var(--red);
+  padding: 0.75rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.crisis-text {
+  font-family: 'Syne Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: white;
+}
+.crisis-text strong { font-size: 0.85rem; }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* SCROLL REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 0 1.5rem 4rem; }
+  .hero h1 { font-size: 5rem; }
+  .hero-stats { display: none; }
+  .hero-sub { flex-direction: column; gap: 1.5rem; }
+  .hero-line { display: none; }
+  .trust-bar { flex-direction: column; }
+  .trust-item { border-right: none; border-bottom: 1px solid var(--grey2); }
+  .section-header { flex-direction: column; align-items: flex-start; padding: 3rem 1.5rem 2rem; }
+  .therapists-grid { grid-template-columns: 1fr; }
+  .therapist-card { border-right: none; border-bottom: 1px solid var(--grey2); }
+  .quiz-inner { grid-template-columns: 1fr; }
+  .quiz-left { border-right: none; border-bottom: 1px solid var(--grey2); }
+  .contact-section { grid-template-columns: 1fr; }
+  .contact-left { border-right: none; border-bottom: 1px solid var(--grey2); padding: 3rem 1.5rem; }
+  .contact-right { padding: 3rem 1.5rem; }
+  .form-row { grid-template-columns: 1fr; }
+  footer { flex-direction: column; align-items: flex-start; padding: 2rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- CRISIS BANNER -->
+<div class="crisis-banner">
+  <span class="crisis-text"><strong>If you're in crisis, help is available 24/7.</strong> Nepal Mental Health Helpline: <strong>1660-01-11394</strong></span>
+  <span class="crisis-text" style="opacity:0.7">You are not alone.</span>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">REALNESS</div>
+  <ul class="nav-links">
+    <li><a href="#therapists">Therapists</a></li>
+    <li><a href="#quiz">Wellness Quiz</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Book a Call</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+
+  <div class="hero-stats">
+    <div>
+      <div class="stat-num">847</div>
+      <div class="stat-label">Lives Changed</div>
+    </div>
+    <div>
+      <div class="stat-num">92%</div>
+      <div class="stat-label">Report Relief</div>
+    </div>
+    <div>
+      <div class="stat-num">7</div>
+      <div class="stat-label">Day Programs</div>
+    </div>
+  </div>
+
+  <div class="hero-tag">Mental Health Camp · Est. 2020 · Nepal</div>
+  <h1>REAL<em>NESS.</em></h1>
+  <div class="hero-sub">
+    <p class="hero-desc">
+      No pretending. No performance. Just <strong>real healing</strong> for real people.
+      A mental health camp that meets you exactly where you are — and walks with you forward.
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">Take the Quiz</button>
+      <button class="btn-outline" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Book a Free Call</button>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll to explore ↓</div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar reveal">
+  <div class="trust-item"><span class="trust-dot"></span> Certified Therapists on Staff</div>
+  <div class="trust-item"><span class="trust-dot"></span> Fully Confidential & Private</div>
+  <div class="trust-item"><span class="trust-dot"></span> Nature-Based Healing Programs</div>
+  <div class="trust-item"><span class="trust-dot"></span> Small Groups (Max 8 per cohort)</div>
+  <div class="trust-item"><span class="trust-dot"></span> AI-Personalized Experience</div>
+</div>
+
+<!-- THERAPISTS -->
+<section id="therapists">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Our People</div>
+      <div class="section-title">MEET THE<br>THERAPISTS</div>
+    </div>
+    <div class="section-count">03</div>
+  </div>
+
+  <div class="therapists-grid">
+    <div class="therapist-card reveal">
+      <div class="therapist-avatar">DR</div>
+      <div class="therapist-name">Dr. Roshan Karki</div>
+      <div class="therapist-role">Lead Clinical Psychologist</div>
+      <p class="therapist-bio">With 14 years of clinical experience, Dr. Karki specializes in trauma-informed care and cognitive behavioral therapy. He believes healing begins when someone finally feels truly heard.</p>
+      <div class="therapist-tags">
+        <span class="tag">CBT</span>
+        <span class="tag">Trauma</span>
+        <span class="tag">Anxiety</span>
+        <span class="tag">Men's Mental Health</span>
+      </div>
+    </div>
+
+    <div class="therapist-card reveal" style="transition-delay:0.1s">
+      <div class="therapist-avatar">PS</div>
+      <div class="therapist-name">Priya Shrestha</div>
+      <div class="therapist-role">Mindfulness & Somatic Therapist</div>
+      <p class="therapist-bio">Priya integrates body-based healing with mindfulness practices drawn from both Western therapy and Eastern traditions. Her approach is grounding, gentle, and deeply effective.</p>
+      <div class="therapist-tags">
+        <span class="tag">Somatic</span>
+        <span class="tag">Mindfulness</span>
+        <span class="tag">Depression</span>
+        <span class="tag">Burnout</span>
+      </div>
+    </div>
+
+    <div class="therapist-card reveal" style="transition-delay:0.2s">
+      <div class="therapist-avatar">AM</div>
+      <div class="therapist-name">Anil Maharjan</div>
+      <div class="therapist-role">Adolescent & Family Therapist</div>
+      <p class="therapist-bio">Anil works with teens and families navigating mental health challenges together. His energy is warm, direct, and judgment-free — teens actually look forward to sessions with him.</p>
+      <div class="therapist-tags">
+        <span class="tag">Teen Therapy</span>
+        <span class="tag">Family Systems</span>
+        <span class="tag">ADHD</span>
+        <span class="tag">Self-Esteem</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI WELLNESS QUIZ -->
+<section id="quiz" class="quiz-section">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">AI-Powered</div>
+      <div class="section-title">WELLNESS<br>CHECK-IN</div>
+    </div>
+    <div class="section-count">02</div>
+  </div>
+
+  <div class="quiz-inner">
+    <div class="quiz-left reveal">
+      <div class="section-label" style="margin-bottom:1rem">How it works</div>
+      <p class="quiz-intro">Talk to our AI wellness assistant. It'll ask you a few honest questions about how you're feeling, then recommend the right program for you.</p>
+
+      <div class="quiz-feature">
+        <div class="quiz-feature-icon">🎯</div>
+        <div class="quiz-feature-text">
+          <h4>Personalized Match</h4>
+          <p>Get matched to a program built for your specific needs.</p>
+        </div>
+      </div>
+      <div class="quiz-feature">
+        <div class="quiz-feature-icon">🔒</div>
+        <div class="quiz-feature-text">
+          <h4>100% Confidential</h4>
+          <p>Conversations are private and never stored or shared.</p>
+        </div>
+      </div>
+      <div class="quiz-feature">
+        <div class="quiz-feature-icon">⚡</div>
+        <div class="quiz-feature-text">
+          <h4>Instant Results</h4>
+          <p>Receive a program recommendation in under 3 minutes.</p>
+        </div>
+      </div>
+      <div class="quiz-feature">
+        <div class="quiz-feature-icon">🧠</div>
+        <div class="quiz-feature-text">
+          <h4>Clinically Informed</h4>
+          <p>Questions designed with our therapists, not just algorithms.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-right reveal">
+      <div class="section-label" style="margin-bottom:1.5rem">AI Wellness Assistant</div>
+      <div id="chat-messages">
+        <div class="msg ai">
+          Hey, welcome to REALNESS. I'm here to help you figure out which program might be the right fit for you. No pressure — just a real conversation.<br><br>
+          To start: <strong>How are you doing right now, honestly?</strong>
+        </div>
+      </div>
+
+      <div class="chat-form">
+        <input type="text" id="chat-input" placeholder="Type your answer here..." autocomplete="off" />
+        <button id="chat-send">Send →</button>
+      </div>
+      <p class="quiz-disclaimer">⚠️ This is a wellness assistant, not a crisis service. If you're in immediate danger, please call 1660-01-11394.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Get Started</div>
+      <div class="section-title">BOOK YOUR<br>FREE CALL</div>
+    </div>
+    <div class="section-count">01</div>
+  </div>
+
+  <div class="contact-section">
+    <div class="contact-left reveal">
+      <div class="contact-big">READY TO<br>START <em>HEALING?</em></div>
+      <p class="contact-desc">Book a free 20-minute intake call with one of our therapists. Zero commitment. Zero judgment. Just a real conversation about what you need.</p>
+
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div class="contact-info">
+          <h4>Location</h4>
+          <p>Budhanilkantha, Kathmandu, Nepal</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div class="contact-info">
+          <h4>Phone</h4>
+          <p>+977 1 4521234</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">✉️</div>
+        <div class="contact-info">
+          <h4>Email</h4>
+          <p>hello@realness.com.np</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🕐</div>
+        <div class="contact-info">
+          <h4>Response Time</h4>
+          <p>We reply within 4 hours, Mon–Sat</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-right reveal">
+      <div id="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-control" placeholder="Aarav" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-control" placeholder="Sharma" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-control" placeholder="you@email.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-control" placeholder="+977 98XXXXXXXX" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Who is this for?</label>
+          <select class="form-control">
+            <option value="">Select...</option>
+            <option>Myself (Adult)</option>
+            <option>My teen / child</option>
+            <option>My family</option>
+            <option>Corporate / Group booking</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">What's on your mind? (optional)</label>
+          <textarea class="form-control" placeholder="Share anything you're comfortable with. Anxiety, burnout, relationship stress — all valid."></textarea>
+        </div>
+        <button class="form-submit" onclick="handleFormSubmit()">Book My Free Call →</button>
+      </div>
+
+      <div class="form-success" id="form-success">
+        <h3>YOU'RE IN.</h3>
+        <p>We'll be in touch within 4 hours to confirm your call time.<br>Check your email for a confirmation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">REALNESS</div>
+  <ul class="footer-links">
+    <li><a href="#">Privacy Policy</a></li>
+    <li><a href="#">Confidentiality</a></li>
+    <li><a href="#">Programs</a></li>
+    <li><a href="#">FAQs</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 REALNESS CAMP · KATHMANDU, NEPAL</div>
+</footer>
+
+<script>
+// CUSTOM CURSOR
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('button, a, input, textarea, select').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+    ring.style.width = '50px';
+    ring.style.height = '50px';
+    ring.style.borderColor = 'rgba(187,255,0,0.8)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.width = '36px';
+    ring.style.height = '36px';
+    ring.style.borderColor = 'rgba(187,255,0,0.5)';
+  });
+});
+
+// SCROLL REVEAL
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(r => observer.observe(r));
+
+// FORM SUBMIT
+function handleFormSubmit() {
+  document.getElementById('contact-form').style.display = 'none';
+  document.getElementById('form-success').style.display = 'block';
+}
+
+// AI CHAT
+const chatMessages = document.getElementById('chat-messages');
+const chatInput = document.getElementById('chat-input');
+const chatSend = document.getElementById('chat-send');
+
+const conversation = [
+  {
+    role: "user",
+    content: [{ type: "text", text: "<<init>>" }]
+  }
+];
+
+const systemPrompt = `You are a warm, empathetic wellness intake assistant for REALNESS Mental Health Camp in Kathmandu, Nepal.
+
+Your job is to gently understand how the user is feeling and, after 3-4 exchanges, recommend one of these programs:
+- "7-Day Reset Camp" — for adults dealing with anxiety, burnout, or emotional exhaustion
+- "Teen Clarity Program" — for ages 13–19 dealing with stress, self-esteem, or academic pressure  
+- "Family Reconnect Weekend" — for families wanting to improve communication and connection
+- "Corporate Wellness Day" — for workplace groups dealing with collective burnout
+
+Guidelines:
+- Be warm, honest, and conversational. NOT clinical or formal.
+- Ask one question at a time. Keep responses under 80 words.
+- After 3-4 user messages, give a clear program recommendation with a brief reason.
+- End your recommendation with: "Would you like to book a free call to learn more?"
+- NEVER diagnose. NEVER give clinical advice.
+- If user mentions self-harm or crisis, respond with: "I hear you, and I want you to know you matter. Please reach out to Nepal's mental health helpline right now: 1660-01-11394. Someone is there for you."`;
+
+async function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text || chatSend.disabled) return;
+
+  // Add user message to UI
+  const userMsg = document.createElement('div');
+  userMsg.className = 'msg user';
+  userMsg.textContent = text;
+  chatMessages.appendChild(userMsg);
+  chatInput.value = '';
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  // Add to conversation history
+  conversation.push({ role: "user", content: text });
+
+  // Show typing indicator
+  chatSend.disabled = true;
+  const loading = document.createElement('div');
+  loading.className = 'msg loading';
+  loading.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  chatMessages.appendChild(loading);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  try {
+    const messages = conversation
+      .filter(m => m.content !== '<<init>>')
+      .map(m => ({ role: m.role, content: m.content }));
+
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 200,
+        system: systemPrompt,
+        messages: messages
+      })
+    });
+
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || "I'm here with you. Can you tell me a little more?";
+
+    // Remove loading, add AI message
+    chatMessages.removeChild(loading);
+    const aiMsg = document.createElement('div');
+    aiMsg.className = 'msg ai';
+    aiMsg.innerHTML = reply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    chatMessages.appendChild(aiMsg);
+    conversation.push({ role: "assistant", content: reply });
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  } catch (err) {
+    chatMessages.removeChild(loading);
+    const errMsg = document.createElement('div');
+    errMsg.className = 'msg ai';
+    errMsg.textContent = "Something went wrong connecting to our assistant. Please try again or contact us directly at hello@realness.com.np";
+    chatMessages.appendChild(errMsg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  chatSend.disabled = false;
+  chatInput.focus();
+}
+
+chatSend.addEventListener('click', sendMessage);
+chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
+</script>
+</body>
+</html>
